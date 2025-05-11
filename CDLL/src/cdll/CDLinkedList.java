@@ -16,7 +16,7 @@ public class CDLinkedList<E> {
         return this.head.data;
     }
 
-    public Node<E> head; // TODO: Change to private!
+    private Node<E> head;
     private int size;
 
     public CDLinkedList() {
@@ -158,6 +158,21 @@ public class CDLinkedList<E> {
         }
     }
 
+    private Node<E> getNodeObjFromIndex(int index) {
+        // internal copy of get method for using with nodes directly (used for delete methods and circular demo)
+        if (index > (size() - 1)){ throw new RuntimeException("[Internal ERROR] Requested object lookup index " + index + " is out of bounds for CDLL size of " + size());} else {
+            Node<E> currentNode = head;
+            for (int i = 0; i <= index; i++) {
+                if (i == index) {
+                    return currentNode;
+                } else {
+                    currentNode = currentNode.next;
+                }
+            }
+            return null;
+        }
+    }
+
     public int size() {
         return this.size;
     }
@@ -167,13 +182,40 @@ public class CDLinkedList<E> {
     }
 
     public void clear() {
-        // TODO: implement
-        return;
+        if (size() == 0){System.out.println("CDLL Empty, nothing to clear!");}
+        Node currentNode = getNodeObjFromIndex(0);
+        Node nextNode = getNodeObjFromIndex(0);
+        for (int i = 0; i < (size() - 1); i++){
+            if (i == 0){} else {
+                currentNode = getNodeObjFromIndex(i);
+                nextNode = getNodeObjFromIndex((i + 1));
+            }
+            currentNode.data = null;
+            currentNode.prev = null;
+            nextNode = currentNode.next;
+            currentNode = nextNode;
+        }
+        size = 0;
+        head = null;
     }
 
+    public E getNext(int index){ return getNodeObjFromIndex(index).next.data;}
+    public E getPrev(int index){ return getNodeObjFromIndex(index).prev.data;}
+
+
+    @Override
     public String toString() {
-        // TODO: implement
-        String dummy = "";
-        return dummy;
+        if (isEmpty()) {return "[]";} // empty array-like string representation
+
+        String toReturn = "[" + head.data;
+        Node<E> current = head.next;
+
+        while (current != null && current != head) {  // loop until circled back to head
+            toReturn = toReturn + ", " + current.data;
+            current = current.next;
+        }
+        System.out.println("Finished while");
+        toReturn = toReturn + "]";
+        return toReturn;
     }
 }
