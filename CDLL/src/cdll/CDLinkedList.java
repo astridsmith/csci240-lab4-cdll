@@ -125,13 +125,14 @@ public class CDLinkedList<E> {
             addFirst(data);
         } else {
             Node<E> currentNode = this.head;
-            Node<E> prevNode = this.head; // just to initialize, should NOT stay as head at point of read operation!
 
             for (int i = 0; i < index; i++){ // advance to the correct node and set vars
-                prevNode = currentNode.prev;
-                if (i == index){break;}
+                //prevNode = currentNode.prev;
+                //if (i == index){break;}
                 currentNode = currentNode.next;
             }
+
+            Node<E> prevNode = currentNode.prev; // just to initialize, should NOT stay as head at point of read operation!
 
             Node<E> toInsert = new Node<>(data); // insert this BEFORE the insertion index
             toInsert.prev = prevNode;
